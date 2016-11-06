@@ -107,6 +107,7 @@ Here is a typical design pattern whereby resource tokens may be requested, gener
 
 ![DocumentDB resource tokens workflow](./media/documentdb-secure-access-to-data/resourcekeyworkflow.png)
 
+
 ## Working with DocumentDB users and permissions
 A DocumentDB user resource is associated with a DocumentDB database.  Each database may contain zero or more DocumentDB users.  The following code snippet shows how to create a DocumentDB user resource.
 
@@ -117,6 +118,7 @@ A DocumentDB user resource is associated with a DocumentDB database.  Each datab
     };
 
     docUser = await client.CreateUserAsync(UriFactory.CreateDatabaseUri("db"), docUser);
+
 
 > [AZURE.NOTE] Each DocumentDB user has a PermissionsLink property which can be used to retrieve the list of permissions associated with the user.
 
@@ -139,9 +141,10 @@ The following code snippet shows how to create a permission resource, read the r
         ResourceLink = documentCollection.SelfLink,
         Id = "readperm"
     };
+    docPermission = await client.CreatePermissionAsync(UriFactory.CreateUserUri("db", "user"), docPermission); 
+    Console.WriteLine(docPermission.Id + " has token of: " + docPermission.Token);
+
             
-  docPermission = await client.CreatePermissionAsync(UriFactory.CreateUserUri("db", "user"), docPermission);
-  Console.WriteLine(docPermission.Id + " has token of: " + docPermission.Token);
   
 If you have specified a partition key for your collection, then the permission for collection, document and attachment resources must also include the ResourcePartitionKey in addition to the ResourceLink.
 
